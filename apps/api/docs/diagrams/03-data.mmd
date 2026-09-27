@@ -1,0 +1,13 @@
+flowchart LR
+  users["users<br/>id · роль · профиль<br/>auth_sessions / user_avatars"]
+  scenarios["scenarios<br/>owner_id · draft · revision<br/>scenario_versions: (id, version)"]
+  sessions["game_sessions<br/>user_id · scenario_id · state<br/>Снимок версий · deadline"]
+  commands["commands / dialogue_*<br/>user + operation + request_id<br/>Реплики · jobs · speech cache"]
+  results["results<br/>session_id UNIQUE · detail<br/>Неизменяемый итог и история"]
+  projection["outbox → проекции<br/>user_progress · achievements<br/>rating_ledger · notifications"]
+  users -->|"1:N"| scenarios
+  scenarios -->|"1:N"| sessions
+  users -->|"1:N"| commands
+  sessions -->|"1:0..1"| results
+  sessions -.->|"снимок / payload"| commands
+  results -.->|"event"| projection

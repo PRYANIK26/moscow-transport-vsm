@@ -1,0 +1,12 @@
+flowchart LR
+  users["Люди<br/>Проводник · автор · админ<br/>Роли определяет сервер"]
+  web["Web / React + Vite<br/>Игра Three.js · редактор<br/>Профиль · обучение · результаты"]
+  api["API / Fastify<br/>Cookie · роли · Zod<br/>Движок и модули"]
+  shared["Общие контракты<br/>@vsm/shared / TypeScript<br/>Граф · сцена · SessionView"]
+  db["PostgreSQL 17<br/>Снимки · команды · результаты<br/>Задания · outbox · проекции"]
+  worker["Фоновый worker<br/>Диалоги · таймеры · начисления<br/>Доставка push-уведомлений"]
+  users -->|"UI"| web
+  web -->|"JSON"| api
+  api -->|"SQL / транзакции"| db
+  worker -->|"SQL"| db
+  shared -->|"типы"| web

@@ -1,0 +1,18 @@
+{
+  "id": "/",
+  "name": "ВСМ · Практика",
+  "short_name": "ВСМ",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f4ef",
+  "theme_color": "#173742",
+  "icons": [
+    {
+      "src": "/vsm-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

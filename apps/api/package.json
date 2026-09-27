@@ -1,0 +1,30 @@
+{
+  "name": "@vsm/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "worker": "tsx src/worker.ts",
+    "db:setup": "tsx src/setup.ts",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@fastify/cookie": "11.1.2",
+    "@fastify/cors": "11.3.0",
+    "@vsm/shared": "*",
+    "fastify": "5.12.5",
+    "libheif-js": "^1.23.2",
+    "pg": "8.23.0",
+    "sharp": "^0.35.4",
+    "web-push": "^3.6.7",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/pg": "8.23.1",
+    "@types/web-push": "^3.6.4"
+  }
+}

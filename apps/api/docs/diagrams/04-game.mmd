@@ -1,0 +1,12 @@
+flowchart LR
+  start["01 / Начало<br/>POST /sessions<br/>Снимок опубликованного графа"]
+  command["02 / Действие<br/>answer · world-action · turn<br/>requestId + expectedVersion"]
+  checks["03 / Проверки<br/>Версия · дедлайн · дистанция<br/>Инвентарь и допустимые действия"]
+  ui["06 / Видимый результат<br/>world + commandFeedback<br/>course → следующий этап / итог"]
+  save["05 / Сохранение<br/>state + version + commands<br/>Финал: results + outbox"]
+  transition["04 / Переход движка<br/>Применить эффекты и условия<br/>Следующий узел / дочерний граф"]
+  start --> command
+  command --> checks
+  checks -->|"если допустимо"| transition
+  transition -->|"commit"| save
+  save -->|"view"| ui

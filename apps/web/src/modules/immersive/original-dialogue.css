@@ -1,0 +1,129 @@
+.game-conversation {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 120px;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.game-message {
+  max-width: 94%;
+}
+.game-message.conductor {
+  align-self: flex-end;
+  background: var(--bone);
+  padding: 12px;
+  border-radius: 12px;
+}
+.game-message small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.game-message p {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.game-message.system {
+  color: var(--muted);
+  font-size: 12px;
+}
+.game-chat {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.game-chat input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  border: 1px solid var(--smoke);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  background: var(--paper);
+}
+.game-chat button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.game-chat button[type="button"] {
+  border: 1px solid var(--line);
+  background: var(--bone);
+}
+.game-action {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.game-action > span:not(.action-indicator) {
+  flex: 1;
+}
+.game-action b {
+  display: block;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.game-action small {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.game-action:hover:not(:disabled) {
+  background: var(--bone);
+}
+.game-action.completed {
+  opacity: 0.6;
+}
+.action-indicator {
+  display: flex;
+  align-items: center;
+  margin-top: 1px;
+}
+.game-dialog .world-actions {
+  max-height: 32vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.game-panel-copy {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.next-objective {
+  margin-top: 16px;
+  flex-shrink: 0;
+}
+.game-source-list {
+  border-top: 1px solid var(--line);
+  margin-top: 16px;
+}
+.game-source-list summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  font-size: 14px;
+}
+.game-source-list p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}

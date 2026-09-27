@@ -1,0 +1,14 @@
+flowchart LR
+  http["HTTP /api<br/>Origin · cookie · доступ<br/>Тело → Zod → обработчик"]
+  play["Игра и обучение<br/>play · immersive · materials<br/>Команды · сцена · диалог"]
+  author["Редактор и помощник<br/>Черновики · проверки · AI<br/>Сохранение → публикация"]
+  personal["Личный кабинет<br/>account · progress · team<br/>leaderboard · notifications"]
+  engine["Правила + репозитории<br/>engine.ts / sessions.ts<br/>Переходы · оценки · версии"]
+  data["Хранилище и адаптеры<br/>PostgreSQL / outbox<br/>Yandex · SpeechKit · Web Push"]
+  http -->|"HTTP"| play
+  play -.->|"DTO"| author
+  http -->|"модули"| personal
+  play -->|"действия"| engine
+  author -->|"черновики / AI"| data
+  engine -->|"SQL"| data
+  personal -->|"чтение"| engine

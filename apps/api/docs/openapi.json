@@ -1,0 +1,5483 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "ВСМ Практика API",
+    "version": "1.0.0",
+    "description": "Cookie auth. Все времена в UTC. Состояние и начисления хранятся в PostgreSQL."
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "vsm_session"
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "Ошибка API",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiFailure"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ApiFailure": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "description": "Необязательные подробности"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "isDemo": {
+            "type": "boolean"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "student",
+              "author",
+              "admin"
+            ]
+          },
+          "brigade": {
+            "type": "string"
+          },
+          "depot": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "role",
+          "brigade",
+          "depot",
+          "company"
+        ],
+        "additionalProperties": false
+      },
+      "ModuleFlags": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "boolean"
+          },
+          "play": {
+            "type": "boolean"
+          },
+          "editor": {
+            "type": "boolean"
+          },
+          "notifications": {
+            "type": "boolean"
+          },
+          "progress": {
+            "type": "boolean"
+          },
+          "team": {
+            "type": "boolean"
+          },
+          "leaderboard": {
+            "type": "boolean"
+          },
+          "immersive": {
+            "type": "boolean"
+          },
+          "voice": {
+            "type": "boolean"
+          },
+          "materials": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "account",
+          "play",
+          "editor",
+          "notifications",
+          "progress",
+          "team",
+          "leaderboard",
+          "immersive",
+          "voice",
+          "materials"
+        ],
+        "additionalProperties": false
+      },
+      "Bootstrap": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "modules": {
+            "$ref": "#/components/schemas/ModuleFlags"
+          },
+          "serverNow": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "user",
+          "modules",
+          "serverNow"
+        ],
+        "additionalProperties": false
+      },
+      "ScenarioSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "scenario",
+              "mega"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "serviceClass": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "string"
+          },
+          "estimatedMinutes": {
+            "type": "integer"
+          },
+          "competencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "publishedVersion": {
+            "type": "integer",
+            "nullable": true
+          },
+          "draftRevision": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "presentation": {
+            "type": "string",
+            "enum": [
+              "text",
+              "immersive"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "description",
+          "serviceClass",
+          "difficulty",
+          "estimatedMinutes",
+          "competencies",
+          "publishedVersion",
+          "draftRevision",
+          "updatedAt"
+        ],
+        "additionalProperties": false
+      },
+      "ScenarioRecord": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/ScenarioSummary"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/ScenarioDefinition"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "publishedVersion": {
+            "type": "integer",
+            "nullable": true
+          }
+        },
+        "required": [
+          "summary",
+          "definition",
+          "revision",
+          "publishedVersion"
+        ],
+        "additionalProperties": false
+      },
+      "ValidationResult": {
+        "type": "object",
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationIssue"
+            }
+          }
+        },
+        "required": [
+          "valid",
+          "issues"
+        ],
+        "additionalProperties": false
+      },
+      "SessionView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scenarioId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "completed"
+            ]
+          },
+          "version": {
+            "type": "integer"
+          },
+          "publishedVersion": {
+            "type": "integer"
+          },
+          "currentScenarioId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "currentScenarioTitle": {
+            "type": "string"
+          },
+          "currentSituation": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "text"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AvailableAnswer"
+            }
+          },
+          "score": {
+            "$ref": "#/components/schemas/Score"
+          },
+          "deadlineAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "serverNow": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DecisionRecord"
+            }
+          },
+          "outcome": {
+            "type": "string",
+            "nullable": true
+          },
+          "outcomeTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "outcomeText": {
+            "type": "string",
+            "nullable": true
+          },
+          "resultId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "world": {
+            "$ref": "#/components/schemas/WorldSessionView"
+          },
+          "commandFeedback": {
+            "type": "object",
+            "properties": {
+              "actionId": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "applied": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "text",
+              "applied"
+            ],
+            "additionalProperties": false
+          },
+          "course": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "completed": {
+                "type": "integer"
+              },
+              "current": {
+                "type": "integer"
+              },
+              "outcomes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "scenarioId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "outcome": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "scenarioId",
+                    "title",
+                    "outcome"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "total",
+              "completed",
+              "current",
+              "outcomes"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "scenarioId",
+          "title",
+          "status",
+          "version",
+          "publishedVersion",
+          "currentScenarioId",
+          "currentScenarioTitle",
+          "currentSituation",
+          "answers",
+          "score",
+          "deadlineAt",
+          "serverNow",
+          "history",
+          "outcome",
+          "resultId",
+          "startedAt",
+          "completedAt"
+        ],
+        "additionalProperties": false
+      },
+      "ResultDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scenarioId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "loyalty": {
+            "type": "integer"
+          },
+          "safety": {
+            "type": "integer"
+          },
+          "xp": {
+            "type": "integer"
+          },
+          "ratingPoints": {
+            "type": "integer"
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DecisionRecord"
+            }
+          },
+          "competencies": {
+            "type": "object",
+            "properties": {
+              "communication": {
+                "type": "integer"
+              },
+              "service": {
+                "type": "integer"
+              },
+              "safety": {
+                "type": "integer"
+              },
+              "conflict": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "communication",
+              "service",
+              "safety",
+              "conflict"
+            ],
+            "additionalProperties": false
+          },
+          "recommendations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "publishedVersion": {
+            "type": "integer"
+          },
+          "outcomeTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "outcomeText": {
+            "type": "string",
+            "nullable": true
+          },
+          "communicationStatus": {
+            "type": "string",
+            "enum": [
+              "not_assessed",
+              "observed",
+              "review_required"
+            ]
+          },
+          "ratingEligible": {
+            "type": "boolean"
+          },
+          "communicationObservations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "explicit_rudeness",
+                    "provider_observation"
+                  ]
+                },
+                "evidence": {
+                  "type": "string"
+                },
+                "messageId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "policyVersion": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "evidence",
+                "messageId",
+                "policyVersion"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "communicationReasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "sessionId",
+          "scenarioId",
+          "title",
+          "completedAt",
+          "outcome",
+          "loyalty",
+          "safety",
+          "xp",
+          "ratingPoints",
+          "history",
+          "competencies",
+          "recommendations",
+          "publishedVersion"
+        ],
+        "additionalProperties": false
+      },
+      "ModuleId": {
+        "type": "string",
+        "enum": [
+          "account",
+          "play",
+          "editor",
+          "notifications",
+          "progress",
+          "team",
+          "leaderboard",
+          "immersive",
+          "voice",
+          "materials"
+        ]
+      },
+      "Competency": {
+        "type": "string",
+        "enum": [
+          "communication",
+          "service",
+          "safety",
+          "conflict"
+        ]
+      },
+      "Position": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "additionalProperties": false
+      },
+      "Effects": {
+        "type": "object",
+        "properties": {
+          "loyalty": {
+            "type": "integer",
+            "minimum": -100,
+            "maximum": 100
+          },
+          "safety": {
+            "type": "integer",
+            "minimum": -100,
+            "maximum": 100
+          },
+          "competencies": {
+            "type": "object",
+            "properties": {
+              "communication": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              },
+              "service": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              },
+              "safety": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              },
+              "conflict": {
+                "type": "integer",
+                "minimum": -100,
+                "maximum": 100
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "Score": {
+        "type": "object",
+        "properties": {
+          "loyalty": {
+            "type": "integer"
+          },
+          "safety": {
+            "type": "integer"
+          },
+          "competencies": {
+            "type": "object",
+            "properties": {
+              "communication": {
+                "type": "integer"
+              },
+              "service": {
+                "type": "integer"
+              },
+              "safety": {
+                "type": "integer"
+              },
+              "conflict": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "communication",
+              "service",
+              "safety",
+              "conflict"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "loyalty",
+          "safety",
+          "competencies"
+        ],
+        "additionalProperties": false
+      },
+      "Rule": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string",
+                "enum": [
+                  "loyalty",
+                  "safety"
+                ]
+              },
+              "op": {
+                "type": "string",
+                "enum": [
+                  "gte",
+                  "lte",
+                  "eq"
+                ]
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "field",
+              "op",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string",
+                "enum": [
+                  "choice"
+                ]
+              },
+              "op": {
+                "type": "string",
+                "enum": [
+                  "includes",
+                  "excludes"
+                ]
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "field",
+              "op",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string",
+                "enum": [
+                  "outcome"
+                ]
+              },
+              "op": {
+                "type": "string",
+                "enum": [
+                  "eq",
+                  "neq"
+                ]
+              },
+              "key": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "field",
+              "op",
+              "key",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string",
+                "enum": [
+                  "competency"
+                ]
+              },
+              "op": {
+                "type": "string",
+                "enum": [
+                  "gte",
+                  "lte"
+                ]
+              },
+              "key": {
+                "type": "string",
+                "enum": [
+                  "communication",
+                  "service",
+                  "safety",
+                  "conflict"
+                ]
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "field",
+              "op",
+              "key",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "Condition": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "all",
+              "any"
+            ]
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rule"
+            }
+          }
+        },
+        "required": [
+          "mode",
+          "rules"
+        ],
+        "additionalProperties": false
+      },
+      "GraphNode": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "position": {
+                "$ref": "#/components/schemas/Position"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "situation"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "timerSeconds": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3600,
+                "default": 60,
+                "description": "Every situation is timed. Omitted value uses 60 seconds."
+              },
+              "timeoutEffects": {
+                "$ref": "#/components/schemas/Effects"
+              },
+              "timeoutExplanation": {
+                "type": "string"
+              },
+              "finishOnTimeout": {
+                "type": "boolean",
+                "description": "True finishes the child scenario on timeout. False requires a timeout edge. Omitted means false when an edge exists, true otherwise."
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "position",
+              "type",
+              "text"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "position": {
+                "$ref": "#/components/schemas/Position"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "answer"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "effects": {
+                "$ref": "#/components/schemas/Effects"
+              },
+              "explanation": {
+                "type": "string"
+              },
+              "improvement": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "position",
+              "type",
+              "text",
+              "effects",
+              "explanation",
+              "improvement"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "position": {
+                "$ref": "#/components/schemas/Position"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "worldAction"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "command": {
+                "type": "string",
+                "enum": [
+                  "inspect",
+                  "request_service",
+                  "confirm_service",
+                  "collect",
+                  "give",
+                  "follow_up",
+                  "move_actor"
+                ]
+              },
+              "targetId": {
+                "type": "string"
+              },
+              "itemId": {
+                "type": "string"
+              },
+              "requires": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "effects": {
+                "$ref": "#/components/schemas/Effects"
+              },
+              "explanation": {
+                "type": "string"
+              },
+              "improvement": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "position",
+              "type",
+              "text",
+              "command",
+              "targetId",
+              "effects",
+              "explanation",
+              "improvement"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "position": {
+                "$ref": "#/components/schemas/Position"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "end"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "outcome": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "position",
+              "type",
+              "text",
+              "outcome"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "position": {
+                "$ref": "#/components/schemas/Position"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "scenario"
+                ]
+              },
+              "scenarioId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "position",
+              "type",
+              "scenarioId"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "GraphEdge": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "default",
+              "timeout"
+            ]
+          },
+          "condition": {
+            "$ref": "#/components/schemas/Condition"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "target"
+        ],
+        "additionalProperties": false
+      },
+      "SourceRef": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "type": "string"
+          },
+          "section": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "document",
+          "section"
+        ],
+        "additionalProperties": false
+      },
+      "ScenarioDefinition": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "enum": [
+              1,
+              2
+            ]
+          },
+          "scene": {
+            "$ref": "#/components/schemas/SceneDefinition"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "scenario",
+              "mega"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "serviceClass": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "comfort",
+              "business",
+              "first",
+              "any"
+            ]
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced"
+            ]
+          },
+          "estimatedMinutes": {
+            "type": "number"
+          },
+          "timerMode": {
+            "type": "string",
+            "enum": [
+              "scenario",
+              "step"
+            ]
+          },
+          "competencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "communication",
+                "service",
+                "safety",
+                "conflict"
+              ]
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceRef"
+            }
+          },
+          "startNodeId": {
+            "type": "string"
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GraphNode"
+            }
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GraphEdge"
+            }
+          },
+          "childScenarioIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "id",
+          "kind",
+          "title",
+          "description",
+          "serviceClass",
+          "difficulty",
+          "estimatedMinutes",
+          "competencies",
+          "sources",
+          "startNodeId",
+          "nodes",
+          "edges",
+          "childScenarioIds"
+        ],
+        "additionalProperties": false
+      },
+      "ValidationIssue": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "nodeId": {
+            "type": "string"
+          },
+          "edgeId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "AvailableAnswer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "text"
+        ],
+        "additionalProperties": false
+      },
+      "DecisionRecord": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scenarioId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scenarioTitle": {
+            "type": "string"
+          },
+          "situationTitle": {
+            "type": "string"
+          },
+          "situationText": {
+            "type": "string"
+          },
+          "answerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "answerText": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "answer",
+              "worldAction",
+              "timeout"
+            ]
+          },
+          "explanation": {
+            "type": "string"
+          },
+          "improvement": {
+            "type": "string"
+          },
+          "effects": {
+            "$ref": "#/components/schemas/Effects"
+          },
+          "before": {
+            "$ref": "#/components/schemas/Score"
+          },
+          "after": {
+            "$ref": "#/components/schemas/Score"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "scenarioId",
+          "scenarioTitle",
+          "situationTitle",
+          "situationText",
+          "answerId",
+          "answerText",
+          "kind",
+          "explanation",
+          "improvement",
+          "effects",
+          "before",
+          "after",
+          "at"
+        ],
+        "additionalProperties": false
+      },
+      "SessionSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scenarioId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "completed"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "resultId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "scenarioId",
+          "title",
+          "status",
+          "startedAt",
+          "completedAt",
+          "resultId"
+        ],
+        "additionalProperties": false
+      },
+      "ResultSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scenarioId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "loyalty": {
+            "type": "integer"
+          },
+          "safety": {
+            "type": "integer"
+          },
+          "xp": {
+            "type": "integer"
+          },
+          "ratingPoints": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "sessionId",
+          "scenarioId",
+          "title",
+          "completedAt",
+          "outcome",
+          "loyalty",
+          "safety",
+          "xp",
+          "ratingPoints"
+        ],
+        "additionalProperties": false
+      },
+      "Achievement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "earnedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "progress": {
+            "type": "integer"
+          },
+          "target": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "earnedAt",
+          "progress",
+          "target"
+        ],
+        "additionalProperties": false
+      },
+      "Challenge": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "target": {
+            "type": "integer"
+          },
+          "progress": {
+            "type": "integer"
+          },
+          "reward": {
+            "type": "integer"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "target",
+          "progress",
+          "reward",
+          "endsAt",
+          "completed"
+        ],
+        "additionalProperties": false
+      },
+      "ProgressSummary": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "integer"
+          },
+          "levelTitle": {
+            "type": "string"
+          },
+          "xp": {
+            "type": "integer"
+          },
+          "nextLevelXp": {
+            "type": "integer"
+          },
+          "ratingPoints": {
+            "type": "integer"
+          },
+          "completedSessions": {
+            "type": "integer"
+          },
+          "competencies": {
+            "type": "object",
+            "properties": {
+              "communication": {
+                "type": "integer"
+              },
+              "service": {
+                "type": "integer"
+              },
+              "safety": {
+                "type": "integer"
+              },
+              "conflict": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "communication",
+              "service",
+              "safety",
+              "conflict"
+            ],
+            "additionalProperties": false
+          },
+          "achievements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Achievement"
+            }
+          },
+          "challenges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Challenge"
+            }
+          },
+          "recommendations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expiringPoints": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "integer"
+              },
+              "expiresAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "amount",
+              "expiresAt"
+            ],
+            "additionalProperties": false,
+            "nullable": true
+          }
+        },
+        "required": [
+          "level",
+          "levelTitle",
+          "xp",
+          "nextLevelXp",
+          "ratingPoints",
+          "completedSessions",
+          "competencies",
+          "achievements",
+          "challenges",
+          "recommendations",
+          "expiringPoints"
+        ],
+        "additionalProperties": false
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "scenario",
+              "challenge",
+              "expiry",
+              "achievement",
+              "system"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "href": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "title",
+          "body",
+          "createdAt",
+          "readAt",
+          "href"
+        ],
+        "additionalProperties": false
+      },
+      "TeamMember": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "brigade": {
+            "type": "string"
+          },
+          "depot": {
+            "type": "string"
+          },
+          "rank": {
+            "type": "integer",
+            "nullable": true
+          },
+          "ratingPoints": {
+            "type": "integer"
+          },
+          "servicePoints": {
+            "type": "integer"
+          },
+          "safetyPoints": {
+            "type": "integer"
+          },
+          "serviceRank": {
+            "type": "integer",
+            "nullable": true
+          },
+          "safetyRank": {
+            "type": "integer",
+            "nullable": true
+          },
+          "completedSessions": {
+            "type": "integer"
+          },
+          "countedScenarios": {
+            "type": "integer"
+          },
+          "isCurrentUser": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "userId",
+          "name",
+          "brigade",
+          "depot",
+          "rank",
+          "ratingPoints",
+          "servicePoints",
+          "safetyPoints",
+          "serviceRank",
+          "safetyRank",
+          "completedSessions",
+          "isCurrentUser"
+        ],
+        "additionalProperties": false
+      },
+      "TeamResponse": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "type": "string",
+            "enum": [
+              "brigade",
+              "depot",
+              "company"
+            ]
+          },
+          "metric": {
+            "type": "string",
+            "enum": [
+              "overall",
+              "service",
+              "safety"
+            ]
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamMember"
+            }
+          },
+          "me": {
+            "$ref": "#/components/schemas/TeamMember",
+            "nullable": true
+          },
+          "total": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "brigade": {
+            "type": "string"
+          },
+          "depot": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope",
+          "members",
+          "me",
+          "total",
+          "offset",
+          "limit",
+          "brigade",
+          "depot",
+          "company"
+        ],
+        "additionalProperties": false
+      },
+      "LeaderboardResponse": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "type": "string",
+            "enum": [
+              "brigade",
+              "depot",
+              "company"
+            ]
+          },
+          "metric": {
+            "type": "string",
+            "enum": [
+              "overall",
+              "service",
+              "safety"
+            ]
+          },
+          "periodDays": {
+            "type": "integer"
+          },
+          "isDemo": {
+            "type": "boolean"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamMember"
+            }
+          },
+          "leaders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamMember"
+            }
+          },
+          "me": {
+            "$ref": "#/components/schemas/TeamMember",
+            "nullable": true
+          }
+        },
+        "required": [
+          "scope",
+          "metric",
+          "periodDays",
+          "isDemo",
+          "total",
+          "offset",
+          "limit",
+          "members",
+          "leaders",
+          "me"
+        ],
+        "additionalProperties": false
+      },
+      "NotificationsStatus": {
+        "type": "object",
+        "properties": {
+          "unreadCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "unreadCount"
+        ],
+        "additionalProperties": false
+      },
+      "PushStatus": {
+        "type": "object",
+        "properties": {
+          "configured": {
+            "type": "boolean"
+          },
+          "publicKey": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "configured",
+          "publicKey"
+        ],
+        "additionalProperties": false
+      },
+      "PushSubscriptionInput": {
+        "type": "object",
+        "properties": {
+          "endpoint": {
+            "type": "string"
+          },
+          "keys": {
+            "type": "object",
+            "properties": {
+              "p256dh": {
+                "type": "string"
+              },
+              "auth": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "p256dh",
+              "auth"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "endpoint",
+          "keys"
+        ],
+        "additionalProperties": false
+      },
+      "PushSubscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "subscribed": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "subscribed"
+        ],
+        "additionalProperties": false
+      },
+      "PushUnsubscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "subscribed": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          }
+        },
+        "required": [
+          "subscribed"
+        ],
+        "additionalProperties": false
+      },
+      "PushSubscriptionStatus": {
+        "type": "object",
+        "properties": {
+          "subscribed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "subscribed"
+        ],
+        "additionalProperties": false
+      },
+      "AccountResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "joinedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "user",
+          "joinedAt"
+        ],
+        "additionalProperties": false
+      },
+      "UsersExport": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "enum": [
+              1
+            ]
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "users"
+        ],
+        "additionalProperties": false
+      },
+      "ResultsExport": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "enum": [
+              1
+            ]
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultDetail"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "results",
+          "nextCursor"
+        ],
+        "additionalProperties": false
+      },
+      "WorldPoint": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number"
+          },
+          "z": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "z"
+        ],
+        "additionalProperties": false
+      },
+      "SceneDefinition": {
+        "type": "object",
+        "properties": {
+          "manifestVersion": {
+            "type": "integer",
+            "enum": [
+              1
+            ]
+          },
+          "brief": {
+            "type": "string"
+          },
+          "objective": {
+            "type": "string"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "trainClass": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "comfort",
+              "business",
+              "first"
+            ]
+          },
+          "spawn": {
+            "$ref": "#/components/schemas/WorldPoint"
+          },
+          "anchors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                },
+                "radius": {
+                  "type": "number"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "passenger",
+                    "radio",
+                    "service",
+                    "seat",
+                    "exit"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "label",
+                "x",
+                "z",
+                "radius",
+                "kind"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "passenger": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "age": {
+                "type": "integer"
+              },
+              "description": {
+                "type": "string"
+              },
+              "anchorId": {
+                "type": "string"
+              },
+              "initialLine": {
+                "type": "string"
+              },
+              "facing": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 360
+              }
+            },
+            "required": [
+              "name",
+              "age",
+              "description",
+              "anchorId",
+              "initialLine"
+            ],
+            "additionalProperties": false
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "anchorId": {
+                  "type": "string"
+                },
+                "prefab": {
+                  "type": "string",
+                  "enum": [
+                    "blanket",
+                    "cleaning_kit",
+                    "bag",
+                    "marker"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "label",
+                "anchorId",
+                "prefab"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "manifestVersion",
+          "trainClass",
+          "spawn",
+          "anchors",
+          "passenger",
+          "items"
+        ],
+        "additionalProperties": false
+      },
+      "WorldSessionView": {
+        "type": "object",
+        "properties": {
+          "scene": {
+            "$ref": "#/components/schemas/SceneDefinition"
+          },
+          "position": {
+            "$ref": "#/components/schemas/WorldPoint"
+          },
+          "inventory": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "deliveredItems": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "completedActions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "none",
+              "requested",
+              "completed"
+            ]
+          },
+          "actorAnchorId": {
+            "type": "string"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "command": {
+                  "type": "string"
+                },
+                "targetId": {
+                  "type": "string"
+                },
+                "itemId": {
+                  "type": "string"
+                },
+                "available": {
+                  "type": "boolean"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "text",
+                "command",
+                "targetId",
+                "available"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "communicationStatus": {
+            "type": "string",
+            "enum": [
+              "not_assessed",
+              "observed",
+              "review_required"
+            ]
+          },
+          "dialogue": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "local",
+                  "yandex"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "idle",
+                  "pending",
+                  "failed"
+                ]
+              },
+              "messages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "role": {
+                      "type": "string",
+                      "enum": [
+                        "conductor",
+                        "passenger"
+                      ]
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "role",
+                    "text",
+                    "at"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "warning": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "mode",
+              "status",
+              "messages"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "scene",
+          "position",
+          "inventory",
+          "completedActions",
+          "service",
+          "actions",
+          "communicationStatus"
+        ],
+        "additionalProperties": false
+      },
+      "ImmersiveCatalog": {
+        "type": "object",
+        "properties": {
+          "manifestVersion": {
+            "type": "integer"
+          },
+          "trainClasses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "anchorKinds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "itemPrefabs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "commands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "movement": {
+            "type": "object",
+            "properties": {
+              "maxMetersPerSecond": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "maxMetersPerSecond"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "manifestVersion",
+          "trainClasses",
+          "anchorKinds",
+          "itemPrefabs",
+          "commands",
+          "movement"
+        ],
+        "additionalProperties": false
+      },
+      "MaterialIndex": {
+        "type": "object",
+        "properties": {
+          "scenarioId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceRef"
+            }
+          }
+        },
+        "required": [
+          "scenarioId",
+          "title",
+          "description",
+          "sources"
+        ],
+        "additionalProperties": false
+      },
+      "MaterialDetail": {
+        "type": "object",
+        "properties": {
+          "scenarioId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceRef"
+            }
+          },
+          "excerpts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "source": {
+                  "$ref": "#/components/schemas/SourceRef"
+                }
+              },
+              "required": [
+                "title",
+                "text",
+                "source"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "scenarioId",
+          "title",
+          "description",
+          "sources",
+          "excerpts"
+        ],
+        "additionalProperties": false
+      },
+      "NotificationFeed": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Notification"
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "unreadCount": {
+            "type": "integer"
+          },
+          "readCount": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "unreadCount",
+          "readCount",
+          "offset",
+          "limit"
+        ],
+        "additionalProperties": false
+      },
+      "NotificationDelete": {
+        "type": "object",
+        "properties": {
+          "deleted": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "deleted"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Проверка API и базы",
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "database": {
+                      "type": "string"
+                    },
+                    "instanceId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__health"
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Войти",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bootstrap"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Вход"
+        ],
+        "operationId": "post__auth_login"
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Зарегистрировать проводника и открыть сеанс",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 50
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 50
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 200
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 128
+                  }
+                },
+                "required": [
+                  "firstName",
+                  "lastName",
+                  "email",
+                  "password"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Создано",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bootstrap"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Вход"
+        ],
+        "operationId": "post__auth_register"
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Выйти",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Вход"
+        ],
+        "operationId": "post__auth_logout"
+      }
+    },
+    "/me": {
+      "get": {
+        "summary": "Текущий пользователь, флаги и время",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bootstrap"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__me"
+      }
+    },
+    "/modules": {
+      "get": {
+        "summary": "Доступность модулей",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleFlags"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Администрирование"
+        ],
+        "operationId": "get__modules"
+      }
+    },
+    "/modules/{id}": {
+      "patch": {
+        "summary": "Включить или выключить модуль",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "enabled"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleFlags"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ModuleId"
+            }
+          }
+        ],
+        "tags": [
+          "Администрирование"
+        ],
+        "operationId": "patch__modules__id_"
+      }
+    },
+    "/admin/users": {
+      "get": {
+        "summary": "Пользователи для администратора",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Администрирование"
+        ],
+        "operationId": "get__admin_users"
+      }
+    },
+    "/admin/users/{id}/role": {
+      "patch": {
+        "summary": "Назначить роль",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "student",
+                      "author",
+                      "admin"
+                    ]
+                  }
+                },
+                "required": [
+                  "role"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Администрирование"
+        ],
+        "operationId": "patch__admin_users__id__role"
+      }
+    },
+    "/account": {
+      "get": {
+        "summary": "Профиль",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__account"
+      },
+      "patch": {
+        "summary": "Изменить имя и фамилию",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "firstName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      }
+                    },
+                    "required": [
+                      "firstName",
+                      "lastName"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "patch__account"
+      }
+    },
+    "/account/avatar/preview": {
+      "post": {
+        "summary": "Подготовить ориентированное превью без сохранения аватара",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "imageBase64": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "imageBase64"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "imageBase64": {
+                      "type": "string"
+                    },
+                    "width": {
+                      "type": "integer"
+                    },
+                    "height": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "imageBase64",
+                    "width",
+                    "height"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "post__account_avatar_preview"
+      }
+    },
+    "/account/avatar": {
+      "put": {
+        "summary": "Загрузить исходное фото до 25 MiB (JPEG, PNG, WebP, AVIF, GIF, TIFF, HEIC); сервер обрезает и сжимает в 256×256 WebP",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "imageBase64": {
+                    "type": "string"
+                  },
+                  "crop": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "y": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "zoom": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 5
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "zoom"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "imageBase64"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  },
+                  "required": [
+                    "user"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "put__account_avatar"
+      },
+      "delete": {
+        "summary": "Удалить свой аватар",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  },
+                  "required": [
+                    "user"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "delete__account_avatar"
+      }
+    },
+    "/users/{id}/avatar": {
+      "get": {
+        "summary": "Прочитать аватар; доступно при выключенном account",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "WebP 256×256, private cache и ETag",
+            "content": {
+              "image/webp": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Аватар не изменился"
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__users__id__avatar"
+      }
+    },
+    "/scenarios": {
+      "get": {
+        "summary": "Опубликованные сценарии",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScenarioSummary"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Обучение"
+        ],
+        "operationId": "get__scenarios"
+      }
+    },
+    "/sessions": {
+      "get": {
+        "summary": "Прохождения пользователя",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SessionSummary"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "get__sessions"
+      },
+      "post": {
+        "summary": "Начать прохождение",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "scenarioId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "scenarioId",
+                  "requestId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Создано",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "post__sessions"
+      }
+    },
+    "/sessions/{id}": {
+      "get": {
+        "summary": "Текущее состояние прохождения",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "get__sessions__id_"
+      }
+    },
+    "/sessions/{id}/answer": {
+      "post": {
+        "summary": "Выбрать доступный ответ",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "answerId": {
+                    "type": "string"
+                  },
+                  "expectedVersion": {
+                    "type": "integer"
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "answerId",
+                  "expectedVersion",
+                  "requestId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "post__sessions__id__answer"
+      }
+    },
+    "/sessions/{id}/timeout": {
+      "post": {
+        "summary": "Зафиксировать истёкший таймер",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "expectedVersion": {
+                    "type": "integer"
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "expectedVersion",
+                  "requestId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "post__sessions__id__timeout"
+      }
+    },
+    "/sessions/{id}/world-action": {
+      "post": {
+        "summary": "Выполнить действие в сцене",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "actionId": {
+                    "type": "string"
+                  },
+                  "expectedVersion": {
+                    "type": "integer"
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "actionId",
+                  "expectedVersion",
+                  "requestId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "post__sessions__id__world_action"
+      }
+    },
+    "/sessions/{id}/world-move": {
+      "post": {
+        "summary": "Переместиться в вагоне",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "position": {
+                    "$ref": "#/components/schemas/WorldPoint"
+                  },
+                  "expectedVersion": {
+                    "type": "integer"
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "position",
+                  "expectedVersion",
+                  "requestId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "post__sessions__id__world_move"
+      }
+    },
+    "/immersive/catalog": {
+      "get": {
+        "summary": "Каталог вагона и пространственных команд для автора",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImmersiveCatalog"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__immersive_catalog"
+      }
+    },
+    "/editor/scenarios": {
+      "get": {
+        "summary": "Черновики автора",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScenarioSummary"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Редактор"
+        ],
+        "operationId": "get__editor_scenarios"
+      },
+      "post": {
+        "summary": "Создать черновик",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "scenario",
+                      "mega"
+                    ]
+                  }
+                },
+                "required": [
+                  "title",
+                  "kind"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Создано",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioRecord"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Редактор"
+        ],
+        "operationId": "post__editor_scenarios"
+      }
+    },
+    "/editor/scenarios/{id}": {
+      "get": {
+        "summary": "Получить черновик",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioRecord"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Редактор"
+        ],
+        "operationId": "get__editor_scenarios__id_"
+      },
+      "put": {
+        "summary": "Сохранить черновик",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "definition": {
+                    "$ref": "#/components/schemas/ScenarioDefinition"
+                  },
+                  "expectedRevision": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "definition",
+                  "expectedRevision"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioRecord"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Редактор"
+        ],
+        "operationId": "put__editor_scenarios__id_"
+      }
+    },
+    "/editor/scenarios/{id}/validate": {
+      "post": {
+        "summary": "Проверить граф",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "definition": {
+                    "$ref": "#/components/schemas/ScenarioDefinition"
+                  }
+                },
+                "required": [
+                  "definition"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResult"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Редактор"
+        ],
+        "operationId": "post__editor_scenarios__id__validate"
+      }
+    },
+    "/editor/scenarios/{id}/publish": {
+      "post": {
+        "summary": "Опубликовать неизменяемую версию",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "expectedRevision": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "expectedRevision"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioRecord"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Некорректный граф",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiFailure"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Редактор"
+        ],
+        "operationId": "post__editor_scenarios__id__publish"
+      }
+    },
+    "/progress": {
+      "get": {
+        "summary": "Прогресс, достижения и цель недели",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressSummary"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__progress"
+      }
+    },
+    "/results": {
+      "get": {
+        "summary": "История результатов",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResultSummary"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__results"
+      }
+    },
+    "/results/{id}": {
+      "get": {
+        "summary": "Результат и разбор",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultDetail"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__results__id_"
+      }
+    },
+    "/notifications": {
+      "get": {
+        "summary": "Сохранённые уведомления",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "get__notifications"
+      }
+    },
+    "/notifications/status": {
+      "get": {
+        "summary": "Точное число непрочитанных уведомлений",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationsStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "get__notifications_status"
+      }
+    },
+    "/notifications/push": {
+      "get": {
+        "summary": "Наличие Web Push и публичный VAPID ключ",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "get__notifications_push"
+      }
+    },
+    "/notifications/push/subscriptions": {
+      "post": {
+        "summary": "Привязать push-подписку к текущему сеансу",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushSubscriptionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushSubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "post__notifications_push_subscriptions"
+      },
+      "delete": {
+        "summary": "Отвязать push-подписку текущего сеанса",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "endpoint": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "endpoint"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushUnsubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "delete__notifications_push_subscriptions"
+      }
+    },
+    "/notifications/push/subscriptions/status": {
+      "post": {
+        "summary": "Проверить push-подписку текущего сеанса",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "endpoint": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "endpoint"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushSubscriptionStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "post__notifications_push_subscriptions_status"
+      }
+    },
+    "/notifications/{id}": {
+      "patch": {
+        "summary": "Прочитать уведомление",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "read": {
+                    "type": "boolean",
+                    "enum": [
+                      true
+                    ]
+                  }
+                },
+                "required": [
+                  "read"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "patch__notifications__id_"
+      },
+      "delete": {
+        "summary": "Удалить своё прочитанное уведомление",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationDelete"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "delete__notifications__id_"
+      }
+    },
+    "/notifications/read-all": {
+      "post": {
+        "summary": "Прочитать все уведомления",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "post__notifications_read_all"
+      }
+    },
+    "/team": {
+      "get": {
+        "summary": "Рейтинг бригады, депо или компании",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "brigade",
+                "depot",
+                "company"
+              ]
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            }
+          },
+          {
+            "name": "metric",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "overall",
+                "service",
+                "safety"
+              ],
+              "default": "overall"
+            }
+          }
+        ],
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__team"
+      }
+    },
+    "/leaderboard": {
+      "get": {
+        "summary": "Лучший результат каждого корневого сценария за последние 720 часов",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaderboardResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "brigade",
+                "depot",
+                "company"
+              ],
+              "default": "company"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          },
+          {
+            "name": "metric",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "overall",
+                "service",
+                "safety"
+              ],
+              "default": "overall"
+            }
+          }
+        ],
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__leaderboard"
+      }
+    },
+    "/integrations/users": {
+      "get": {
+        "summary": "Экспорт пользователей",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersExport"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Интеграции"
+        ],
+        "operationId": "get__integrations_users"
+      }
+    },
+    "/integrations/results": {
+      "get": {
+        "summary": "Экспорт результатов",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultsExport"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Opaque keyset cursor from nextCursor; keep original since unchanged.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Интеграции"
+        ],
+        "operationId": "get__integrations_results"
+      }
+    },
+    "/notifications/feed": {
+      "get": {
+        "summary": "Фильтрованная страница видимых уведомлений",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationFeed"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "scenario",
+                "achievement",
+                "challenge",
+                "expiry",
+                "system"
+              ],
+              "default": "all"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "read",
+                "unread"
+              ],
+              "default": "all"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "newest",
+                "oldest"
+              ],
+              "default": "newest"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          }
+        ],
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "get__notifications_feed"
+      }
+    },
+    "/notifications/read": {
+      "delete": {
+        "summary": "Удалить все свои прочитанные уведомления",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationDelete"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Уведомления"
+        ],
+        "operationId": "delete__notifications_read"
+      }
+    },
+    "/materials": {
+      "get": {
+        "summary": "Материалы опубликованных сценариев",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MaterialIndex"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Обучение"
+        ],
+        "operationId": "get__materials"
+      }
+    },
+    "/scenarios/{id}/materials": {
+      "get": {
+        "summary": "Проверенные учебные выдержки опубликованного сценария",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialDetail"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Обучение"
+        ],
+        "operationId": "get__scenarios__id__materials"
+      }
+    },
+    "/sessions/{id}/turn": {
+      "post": {
+        "summary": "Сохранить реплику проводника и поставить ответ пассажира в очередь",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "expectedVersion": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "text",
+                  "requestId",
+                  "expectedVersion"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "session": {
+                      "$ref": "#/components/schemas/SessionView"
+                    },
+                    "jobId": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
+                  "required": [
+                    "session",
+                    "jobId"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "post__sessions__id__turn"
+      }
+    },
+    "/sessions/{id}/voice": {
+      "post": {
+        "summary": "Распознать PCM16LE mono 16 кГц без отправки реплики",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "audioBase64": {
+                    "type": "string"
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "expectedVersion": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "audioBase64",
+                  "requestId",
+                  "expectedVersion"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "post__sessions__id__voice"
+      }
+    },
+    "/sessions/{id}/speech": {
+      "post": {
+        "summary": "Озвучить сохранённую реплику пассажира",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "messageId": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    },
+                    "required": [
+                      "messageId"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "initialScenarioId": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    },
+                    "required": [
+                      "initialScenarioId"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ogg Opus audio",
+            "content": {
+              "audio/ogg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Игра и голос"
+        ],
+        "operationId": "post__sessions__id__speech"
+      }
+    },
+    "/editor/assistant": {
+      "get": {
+        "summary": "Доступность помощника для автора",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "available": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "available"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Редактор"
+        ],
+        "operationId": "get__editor_assistant"
+      }
+    },
+    "/editor/scenarios/{id}/assistant": {
+      "post": {
+        "summary": "Подготовить проверенное предложение без сохранения и публикации",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "prompt": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 6000
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "scenario",
+                      "scene"
+                    ]
+                  },
+                  "definition": {
+                    "$ref": "#/components/schemas/ScenarioDefinition"
+                  },
+                  "expectedRevision": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "prompt",
+                  "mode",
+                  "definition",
+                  "expectedRevision"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "summary": {
+                      "type": "string"
+                    },
+                    "definition": {
+                      "$ref": "#/components/schemas/ScenarioDefinition"
+                    },
+                    "baseRevision": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "summary",
+                    "definition",
+                    "baseRevision"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Редактор"
+        ],
+        "operationId": "post__editor_scenarios__id__assistant"
+      }
+    },
+    "/scenarios/{id}/next": {
+      "get": {
+        "summary": "Следующая опубликованная ситуация линейного маршрута",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "courseId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "position": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "next": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "title": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title"
+                      ],
+                      "additionalProperties": false,
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "courseId",
+                    "position",
+                    "total",
+                    "next"
+                  ],
+                  "additionalProperties": false,
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "tags": [
+          "Обучение"
+        ],
+        "operationId": "get__scenarios__id__next"
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "summary": "Спецификация OpenAPI",
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Кабинет и система"
+        ],
+        "operationId": "get__openapi_json"
+      }
+    }
+  }
+}

@@ -1,0 +1,98 @@
+name: vsm-demo
+
+x-api-env: &api-env
+  DATABASE_URL: postgresql://vsm:${POSTGRES_PASSWORD:-vsm-local-demo}@db:5432/vsm
+  HOST: 0.0.0.0
+  PORT: '4180'
+  TRUST_PROXY_CIDRS: ${TRUST_PROXY_CIDRS:-127.0.0.1,::1,172.16.0.0/12}
+  WEB_ORIGIN: ${WEB_ORIGIN:-http://127.0.0.1:5180}
+  NODE_ENV: ${NODE_ENV:-development}
+  LEADERBOARD_ALL_STUDENTS: ${LEADERBOARD_ALL_STUDENTS:-true}
+  YANDEX_API_KEY: ${YANDEX_API_KEY:-}
+  YANDEX_FOLDER_ID: ${YANDEX_FOLDER_ID:-}
+  YANDEX_SPEECHKIT_API_KEY: ${YANDEX_SPEECHKIT_API_KEY:-}
+  YANDEX_MODEL: ${YANDEX_MODEL:-yandexgpt/rc}
+  YANDEX_VOICE: ${YANDEX_VOICE:-filipp}
+  VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+  VAPID_SUBJECT: ${VAPID_SUBJECT:-}
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: vsm
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vsm-local-demo}
+      POSTGRES_DB: vsm
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U vsm -d vsm']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  init:
+    image: vsm-demo-api:local
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.api
+    environment:
+      <<: *api-env
+      NODE_ENV: development
+      DEMO_SEED: 'true'
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ['npm', 'run', 'db:setup', '-w', '@vsm/api']
+    restart: 'no'
+
+  api:
+    image: vsm-demo-api:local
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.api
+    environment: *api-env
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:4180/api/health').then(r => {if (!r.ok) process.exit(1)}).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 4s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+
+  worker:
+    image: vsm-demo-api:local
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.api
+    environment: *api-env
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    command: ['npm', 'run', 'worker', '-w', '@vsm/api']
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.web
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - '127.0.0.1:5180:80'
+    restart: unless-stopped
+
+volumes:
+  pgdata:

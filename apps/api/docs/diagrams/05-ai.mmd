@@ -1,0 +1,11 @@
+flowchart LR
+  prompt["Автор / описание<br/>POST .../assistant<br/>Режим scenario или scene"]
+  plan["Yandex → план → проверка<br/>Строгая схема ответа<br/>Компиляция допустимого графа"]
+  apply["Просмотр → применение<br/>PUT черновика + baseRevision<br/>POST publish отдельно"]
+  speech["Голос проводника<br/>PCM16LE → POST /voice<br/>SpeechKit STT → текст"]
+  turn["POST /turn → очередь<br/>Worker: реплика + команда<br/>Проверка доступного действия"]
+  reply["Ответ и озвучка<br/>GET session → messageId<br/>POST /speech → Ogg Opus"]
+  prompt --> plan
+  plan -->|"план"| apply
+  speech -->|"текст"| turn
+  turn -->|"poll"| reply

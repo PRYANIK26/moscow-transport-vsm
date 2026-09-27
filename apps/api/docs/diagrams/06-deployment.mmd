@@ -1,0 +1,12 @@
+flowchart LR
+  browser["Браузер<br/>localhost:5180<br/>Игра · /api/docs"]
+  vite["Web / Vite proxy<br/>Статика и интерфейс<br/>/api → API_PROXY_TARGET"]
+  api["API / Node.js ≥ 22.12<br/>PORT из .env<br/>По умолчанию 4180"]
+  env["Серверное окружение<br/>DATABASE_URL · WEB_ORIGIN<br/>YANDEX_* · VAPID_*"]
+  database["PostgreSQL<br/>Локально 127.0.0.1:55432<br/>Docker: db:5432 + volume"]
+  worker["Worker / Node.js<br/>Тот же DATABASE_URL<br/>Очереди без отдельного брокера"]
+  browser -->|"HTTP"| vite
+  vite -->|"HTTP"| api
+  api -->|"SQL"| database
+  worker -->|"SQL"| database
+  env -.->|"конфигурация"| api

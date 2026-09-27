@@ -1,0 +1,1569 @@
+{
+  "source": "VSM_complete_roofs.FCStd",
+  "sourceSha256": "85cb1521d9b172158c154b71e1bfa9f191db65df6eeca92400d634e459157f4d",
+  "units": "metres",
+  "conversion": "FreeCAD X,Y,Z mm -> game Y,Z-1250,X metres",
+  "deflectionMm": 8,
+  "angularDeflection": 0.6,
+  "cars": [
+    {
+      "id": "first",
+      "file": "first.glb",
+      "bytes": 1304928,
+      "uniqueTriangles": 49396,
+      "nodes": 114,
+      "seats": [
+        {
+          "name": "FirstSeat",
+          "x": -0.5875,
+          "z": 15.0,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "FirstSeat001",
+          "x": -1.1525,
+          "z": 15.0,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "FirstSeat002",
+          "x": 0.5875,
+          "z": 15.0,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "FirstSeat003",
+          "x": -0.5875,
+          "z": 16.2,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "FirstSeat004",
+          "x": -1.1525,
+          "z": 16.2,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "FirstSeat005",
+          "x": 0.5875,
+          "z": 16.2,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "FirstSeat006",
+          "x": -0.5875,
+          "z": 17.4,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "FirstSeat007",
+          "x": -1.1525,
+          "z": 17.4,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "FirstSeat008",
+          "x": 0.5875,
+          "z": 17.4,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "FirstSeat009",
+          "x": -0.5875,
+          "z": 18.6,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "FirstSeat010",
+          "x": -1.1525,
+          "z": 18.6,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "FirstSeat011",
+          "x": 0.5875,
+          "z": 18.6,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "FirstSeat012",
+          "x": -0.5875,
+          "z": 19.8,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "FirstSeat013",
+          "x": -1.1525,
+          "z": 19.8,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "FirstSeat014",
+          "x": 0.5875,
+          "z": 19.8,
+          "yaw": 0,
+          "row": 4
+        }
+      ],
+      "sha256": "b27371e65be63c93e375d38269758b22c1c6f75e969a2a3a37a2f6076de5ff91"
+    },
+    {
+      "id": "business",
+      "file": "business.glb",
+      "bytes": 1284288,
+      "uniqueTriangles": 47316,
+      "nodes": 167,
+      "seats": [
+        {
+          "name": "BusinessSeat",
+          "x": -0.5,
+          "z": 5.0,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "BusinessSeat001",
+          "x": -1.01,
+          "z": 5.0,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "BusinessSeat002",
+          "x": 0.5,
+          "z": 5.0,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "BusinessSeat003",
+          "x": 1.01,
+          "z": 5.0,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "BusinessSeat004",
+          "x": -0.5,
+          "z": 5.98,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "BusinessSeat005",
+          "x": -1.01,
+          "z": 5.98,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "BusinessSeat006",
+          "x": 0.5,
+          "z": 5.98,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "BusinessSeat007",
+          "x": 1.01,
+          "z": 5.98,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "BusinessSeat008",
+          "x": -0.5,
+          "z": 6.96,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "BusinessSeat009",
+          "x": -1.01,
+          "z": 6.96,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "BusinessSeat010",
+          "x": 0.5,
+          "z": 6.96,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "BusinessSeat011",
+          "x": 1.01,
+          "z": 6.96,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "BusinessSeat012",
+          "x": -0.5,
+          "z": 7.94,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "BusinessSeat013",
+          "x": -1.01,
+          "z": 7.94,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "BusinessSeat014",
+          "x": 0.5,
+          "z": 7.94,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "BusinessSeat015",
+          "x": 1.01,
+          "z": 7.94,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "BusinessSeat016",
+          "x": -0.5,
+          "z": 8.92,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "BusinessSeat017",
+          "x": -1.01,
+          "z": 8.92,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "BusinessSeat018",
+          "x": 0.5,
+          "z": 8.92,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "BusinessSeat019",
+          "x": 1.01,
+          "z": 8.92,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "BusinessSeat020",
+          "x": -0.5,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "BusinessSeat021",
+          "x": -1.01,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "BusinessSeat022",
+          "x": 0.5,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "BusinessSeat023",
+          "x": 1.01,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "BusinessSeat024",
+          "x": -0.5,
+          "z": 10.88,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "BusinessSeat025",
+          "x": -1.01,
+          "z": 10.88,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "BusinessSeat026",
+          "x": 0.5,
+          "z": 10.88,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "BusinessSeat027",
+          "x": 1.01,
+          "z": 10.88,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "BusinessSeat028",
+          "x": -0.5,
+          "z": 11.86,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "BusinessSeat029",
+          "x": -1.01,
+          "z": 11.86,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "BusinessSeat030",
+          "x": 0.5,
+          "z": 11.86,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "BusinessSeat031",
+          "x": 1.01,
+          "z": 11.86,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "BusinessSeat032",
+          "x": -0.5,
+          "z": 12.84,
+          "yaw": 3.141592653589793,
+          "row": 8
+        },
+        {
+          "name": "BusinessSeat033",
+          "x": -1.01,
+          "z": 12.84,
+          "yaw": 3.141592653589793,
+          "row": 8
+        },
+        {
+          "name": "BusinessSeat034",
+          "x": 0.5,
+          "z": 12.84,
+          "yaw": 3.141592653589793,
+          "row": 8
+        },
+        {
+          "name": "BusinessSeat035",
+          "x": 1.01,
+          "z": 12.84,
+          "yaw": 3.141592653589793,
+          "row": 8
+        },
+        {
+          "name": "BusinessSeat036",
+          "x": -0.5,
+          "z": 13.82,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "BusinessSeat037",
+          "x": -1.01,
+          "z": 13.82,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "BusinessSeat038",
+          "x": 0.5,
+          "z": 13.82,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "BusinessSeat039",
+          "x": 1.01,
+          "z": 13.82,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "BusinessSeat040",
+          "x": -0.5,
+          "z": 14.8,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "BusinessSeat041",
+          "x": -1.01,
+          "z": 14.8,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "BusinessSeat042",
+          "x": 0.5,
+          "z": 14.8,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "BusinessSeat043",
+          "x": 1.01,
+          "z": 14.8,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "BusinessSeat044",
+          "x": -0.5,
+          "z": 15.78,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "BusinessSeat045",
+          "x": -1.01,
+          "z": 15.78,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "BusinessSeat046",
+          "x": 0.5,
+          "z": 15.78,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "BusinessSeat047",
+          "x": 1.01,
+          "z": 15.78,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "BusinessSeat048",
+          "x": -0.5,
+          "z": 16.76,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "BusinessSeat049",
+          "x": -1.01,
+          "z": 16.76,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "BusinessSeat050",
+          "x": 0.5,
+          "z": 16.76,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "BusinessSeat051",
+          "x": 1.01,
+          "z": 16.76,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "BusinessSeat052",
+          "x": -0.5,
+          "z": 17.74,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "BusinessSeat053",
+          "x": -1.01,
+          "z": 17.74,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "BusinessSeat054",
+          "x": 0.5,
+          "z": 17.74,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "BusinessSeat055",
+          "x": 1.01,
+          "z": 17.74,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "BusinessSeat056",
+          "x": -0.5,
+          "z": 18.72,
+          "yaw": 3.141592653589793,
+          "row": 14
+        },
+        {
+          "name": "BusinessSeat057",
+          "x": -1.01,
+          "z": 18.72,
+          "yaw": 3.141592653589793,
+          "row": 14
+        },
+        {
+          "name": "BusinessSeat058",
+          "x": 0.5,
+          "z": 18.72,
+          "yaw": 3.141592653589793,
+          "row": 14
+        },
+        {
+          "name": "BusinessSeat059",
+          "x": 1.01,
+          "z": 18.72,
+          "yaw": 3.141592653589793,
+          "row": 14
+        },
+        {
+          "name": "BusinessSeat060",
+          "x": -0.5,
+          "z": 19.7,
+          "yaw": 3.141592653589793,
+          "row": 15
+        },
+        {
+          "name": "BusinessSeat061",
+          "x": -1.01,
+          "z": 19.7,
+          "yaw": 3.141592653589793,
+          "row": 15
+        },
+        {
+          "name": "BusinessSeat062",
+          "x": 0.5,
+          "z": 19.7,
+          "yaw": 3.141592653589793,
+          "row": 15
+        },
+        {
+          "name": "BusinessSeat063",
+          "x": 1.01,
+          "z": 19.7,
+          "yaw": 3.141592653589793,
+          "row": 15
+        },
+        {
+          "name": "BusinessSeat064",
+          "x": -0.5,
+          "z": 20.68,
+          "yaw": 3.141592653589793,
+          "row": 16
+        },
+        {
+          "name": "BusinessSeat065",
+          "x": -1.01,
+          "z": 20.68,
+          "yaw": 3.141592653589793,
+          "row": 16
+        },
+        {
+          "name": "BusinessSeat066",
+          "x": 0.5,
+          "z": 20.68,
+          "yaw": 3.141592653589793,
+          "row": 16
+        },
+        {
+          "name": "BusinessSeat067",
+          "x": 1.01,
+          "z": 20.68,
+          "yaw": 3.141592653589793,
+          "row": 16
+        }
+      ],
+      "sha256": "fa1fc58f72dbd599e66fcde641993772a39fae1fa114007ea5a17d64ae087e30"
+    },
+    {
+      "id": "comfort",
+      "file": "comfort.glb",
+      "bytes": 1296288,
+      "uniqueTriangles": 47702,
+      "nodes": 162,
+      "seats": [
+        {
+          "name": "ComfortSeat",
+          "x": -0.5,
+          "z": 5.25,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "ComfortSeat001",
+          "x": -1.01,
+          "z": 5.25,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "ComfortSeat002",
+          "x": 0.5,
+          "z": 5.25,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "ComfortSeat003",
+          "x": 1.01,
+          "z": 5.25,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "ComfortSeat004",
+          "x": -0.5,
+          "z": 6.18,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "ComfortSeat005",
+          "x": -1.01,
+          "z": 6.18,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "ComfortSeat006",
+          "x": 0.5,
+          "z": 6.18,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "ComfortSeat007",
+          "x": 1.01,
+          "z": 6.18,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "ComfortSeat008",
+          "x": -0.5,
+          "z": 7.11,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "ComfortSeat009",
+          "x": -1.01,
+          "z": 7.11,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "ComfortSeat010",
+          "x": 0.5,
+          "z": 7.11,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "ComfortSeat011",
+          "x": 1.01,
+          "z": 7.11,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "ComfortSeat012",
+          "x": -0.5,
+          "z": 8.04,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "ComfortSeat013",
+          "x": -1.01,
+          "z": 8.04,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "ComfortSeat014",
+          "x": 0.5,
+          "z": 8.04,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "ComfortSeat015",
+          "x": 1.01,
+          "z": 8.04,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "ComfortSeat016",
+          "x": -0.5,
+          "z": 8.97,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "ComfortSeat017",
+          "x": -1.01,
+          "z": 8.97,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "ComfortSeat018",
+          "x": 0.5,
+          "z": 8.97,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "ComfortSeat019",
+          "x": 1.01,
+          "z": 8.97,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "ComfortSeat020",
+          "x": -0.5,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "ComfortSeat021",
+          "x": -1.01,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "ComfortSeat024",
+          "x": -0.5,
+          "z": 10.83,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "ComfortSeat025",
+          "x": -1.01,
+          "z": 10.83,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "ComfortSeat028",
+          "x": -0.5,
+          "z": 11.76,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "ComfortSeat029",
+          "x": -1.01,
+          "z": 11.76,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "ComfortSeat032",
+          "x": -0.5,
+          "z": 12.69,
+          "yaw": 0,
+          "row": 8
+        },
+        {
+          "name": "ComfortSeat033",
+          "x": -1.01,
+          "z": 12.69,
+          "yaw": 0,
+          "row": 8
+        },
+        {
+          "name": "ComfortSeat036",
+          "x": -0.5,
+          "z": 13.62,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "ComfortSeat037",
+          "x": -1.01,
+          "z": 13.62,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "ComfortSeat038",
+          "x": 0.5,
+          "z": 13.62,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "ComfortSeat039",
+          "x": 1.01,
+          "z": 13.62,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "ComfortSeat040",
+          "x": -0.5,
+          "z": 14.55,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "ComfortSeat041",
+          "x": -1.01,
+          "z": 14.55,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "ComfortSeat042",
+          "x": 0.5,
+          "z": 14.55,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "ComfortSeat043",
+          "x": 1.01,
+          "z": 14.55,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "ComfortSeat044",
+          "x": -0.5,
+          "z": 15.48,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "ComfortSeat045",
+          "x": -1.01,
+          "z": 15.48,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "ComfortSeat046",
+          "x": 0.5,
+          "z": 15.48,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "ComfortSeat047",
+          "x": 1.01,
+          "z": 15.48,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "ComfortSeat048",
+          "x": -0.5,
+          "z": 16.41,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "ComfortSeat049",
+          "x": -1.01,
+          "z": 16.41,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "ComfortSeat050",
+          "x": 0.5,
+          "z": 16.41,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "ComfortSeat051",
+          "x": 1.01,
+          "z": 16.41,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "ComfortSeat052",
+          "x": -0.5,
+          "z": 17.34,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "ComfortSeat053",
+          "x": -1.01,
+          "z": 17.34,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "ComfortSeat054",
+          "x": 0.5,
+          "z": 17.34,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "ComfortSeat055",
+          "x": 1.01,
+          "z": 17.34,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "ComfortSeat056",
+          "x": -0.5,
+          "z": 18.27,
+          "yaw": 3.141592653589793,
+          "row": 14
+        },
+        {
+          "name": "ComfortSeat057",
+          "x": -1.01,
+          "z": 18.27,
+          "yaw": 3.141592653589793,
+          "row": 14
+        },
+        {
+          "name": "ComfortSeat058",
+          "x": 0.5,
+          "z": 18.27,
+          "yaw": 3.141592653589793,
+          "row": 14
+        },
+        {
+          "name": "ComfortSeat059",
+          "x": 1.01,
+          "z": 18.27,
+          "yaw": 3.141592653589793,
+          "row": 14
+        },
+        {
+          "name": "ComfortSeat060",
+          "x": -0.5,
+          "z": 19.2,
+          "yaw": 3.141592653589793,
+          "row": 15
+        },
+        {
+          "name": "ComfortSeat061",
+          "x": -1.01,
+          "z": 19.2,
+          "yaw": 3.141592653589793,
+          "row": 15
+        },
+        {
+          "name": "ComfortSeat062",
+          "x": 0.5,
+          "z": 19.2,
+          "yaw": 3.141592653589793,
+          "row": 15
+        },
+        {
+          "name": "ComfortSeat063",
+          "x": 1.01,
+          "z": 19.2,
+          "yaw": 3.141592653589793,
+          "row": 15
+        },
+        {
+          "name": "ComfortSeat064",
+          "x": -0.5,
+          "z": 20.13,
+          "yaw": 3.141592653589793,
+          "row": 16
+        },
+        {
+          "name": "ComfortSeat065",
+          "x": -1.01,
+          "z": 20.13,
+          "yaw": 3.141592653589793,
+          "row": 16
+        },
+        {
+          "name": "ComfortSeat066",
+          "x": 0.5,
+          "z": 20.13,
+          "yaw": 3.141592653589793,
+          "row": 16
+        },
+        {
+          "name": "ComfortSeat067",
+          "x": 1.01,
+          "z": 20.13,
+          "yaw": 3.141592653589793,
+          "row": 16
+        },
+        {
+          "name": "ComfortSeat068",
+          "x": -0.5,
+          "z": 21.06,
+          "yaw": 3.141592653589793,
+          "row": 17
+        },
+        {
+          "name": "ComfortSeat069",
+          "x": -1.01,
+          "z": 21.06,
+          "yaw": 3.141592653589793,
+          "row": 17
+        },
+        {
+          "name": "ComfortSeat070",
+          "x": 0.5,
+          "z": 21.06,
+          "yaw": 3.141592653589793,
+          "row": 17
+        },
+        {
+          "name": "ComfortSeat071",
+          "x": 1.01,
+          "z": 21.06,
+          "yaw": 3.141592653589793,
+          "row": 17
+        }
+      ],
+      "sha256": "732bce50c5f07cbb256132a578d56d111b1a5c9882931764b10a2437ff647142"
+    },
+    {
+      "id": "standard",
+      "file": "standard.glb",
+      "bytes": 1415388,
+      "uniqueTriangles": 52184,
+      "nodes": 177,
+      "seats": [
+        {
+          "name": "StandardSeat",
+          "x": -0.245,
+          "z": 5.25,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "StandardSeat001",
+          "x": -0.755,
+          "z": 5.25,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "StandardSeat002",
+          "x": -1.265,
+          "z": 5.25,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "StandardSeat003",
+          "x": 0.755,
+          "z": 5.25,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "StandardSeat004",
+          "x": 1.265,
+          "z": 5.25,
+          "yaw": 0,
+          "row": 0
+        },
+        {
+          "name": "StandardSeat005",
+          "x": -0.245,
+          "z": 6.18,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "StandardSeat006",
+          "x": -0.755,
+          "z": 6.18,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "StandardSeat007",
+          "x": -1.265,
+          "z": 6.18,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "StandardSeat008",
+          "x": 0.755,
+          "z": 6.18,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "StandardSeat009",
+          "x": 1.265,
+          "z": 6.18,
+          "yaw": 0,
+          "row": 1
+        },
+        {
+          "name": "StandardSeat010",
+          "x": -0.245,
+          "z": 7.11,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "StandardSeat011",
+          "x": -0.755,
+          "z": 7.11,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "StandardSeat012",
+          "x": -1.265,
+          "z": 7.11,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "StandardSeat013",
+          "x": 0.755,
+          "z": 7.11,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "StandardSeat014",
+          "x": 1.265,
+          "z": 7.11,
+          "yaw": 0,
+          "row": 2
+        },
+        {
+          "name": "StandardSeat015",
+          "x": -0.245,
+          "z": 8.04,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "StandardSeat016",
+          "x": -0.755,
+          "z": 8.04,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "StandardSeat017",
+          "x": -1.265,
+          "z": 8.04,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "StandardSeat018",
+          "x": 0.755,
+          "z": 8.04,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "StandardSeat019",
+          "x": 1.265,
+          "z": 8.04,
+          "yaw": 0,
+          "row": 3
+        },
+        {
+          "name": "StandardSeat020",
+          "x": -0.245,
+          "z": 8.97,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "StandardSeat021",
+          "x": -0.755,
+          "z": 8.97,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "StandardSeat022",
+          "x": -1.265,
+          "z": 8.97,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "StandardSeat023",
+          "x": 0.755,
+          "z": 8.97,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "StandardSeat024",
+          "x": 1.265,
+          "z": 8.97,
+          "yaw": 0,
+          "row": 4
+        },
+        {
+          "name": "StandardSeat025",
+          "x": -0.245,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "StandardSeat026",
+          "x": -0.755,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "StandardSeat027",
+          "x": -1.265,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "StandardSeat028",
+          "x": 0.755,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "StandardSeat029",
+          "x": 1.265,
+          "z": 9.9,
+          "yaw": 0,
+          "row": 5
+        },
+        {
+          "name": "StandardSeat030",
+          "x": -0.245,
+          "z": 10.83,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "StandardSeat031",
+          "x": -0.755,
+          "z": 10.83,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "StandardSeat032",
+          "x": -1.265,
+          "z": 10.83,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "StandardSeat033",
+          "x": 0.755,
+          "z": 10.83,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "StandardSeat034",
+          "x": 1.265,
+          "z": 10.83,
+          "yaw": 0,
+          "row": 6
+        },
+        {
+          "name": "StandardSeat035",
+          "x": -0.245,
+          "z": 11.76,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "StandardSeat036",
+          "x": -0.755,
+          "z": 11.76,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "StandardSeat037",
+          "x": -1.265,
+          "z": 11.76,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "StandardSeat038",
+          "x": 0.755,
+          "z": 11.76,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "StandardSeat039",
+          "x": 1.265,
+          "z": 11.76,
+          "yaw": 0,
+          "row": 7
+        },
+        {
+          "name": "StandardSeat040",
+          "x": -0.245,
+          "z": 12.69,
+          "yaw": 0,
+          "row": 8
+        },
+        {
+          "name": "StandardSeat041",
+          "x": -0.755,
+          "z": 12.69,
+          "yaw": 0,
+          "row": 8
+        },
+        {
+          "name": "StandardSeat042",
+          "x": -1.265,
+          "z": 12.69,
+          "yaw": 0,
+          "row": 8
+        },
+        {
+          "name": "StandardSeat043",
+          "x": 0.755,
+          "z": 12.69,
+          "yaw": 0,
+          "row": 8
+        },
+        {
+          "name": "StandardSeat044",
+          "x": 1.265,
+          "z": 12.69,
+          "yaw": 0,
+          "row": 8
+        },
+        {
+          "name": "StandardSeat045",
+          "x": -0.245,
+          "z": 13.62,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "StandardSeat046",
+          "x": -0.755,
+          "z": 13.62,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "StandardSeat047",
+          "x": -1.265,
+          "z": 13.62,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "StandardSeat048",
+          "x": 0.755,
+          "z": 13.62,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "StandardSeat049",
+          "x": 1.265,
+          "z": 13.62,
+          "yaw": 3.141592653589793,
+          "row": 9
+        },
+        {
+          "name": "StandardSeat050",
+          "x": -0.245,
+          "z": 14.55,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "StandardSeat051",
+          "x": -0.755,
+          "z": 14.55,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "StandardSeat052",
+          "x": -1.265,
+          "z": 14.55,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "StandardSeat053",
+          "x": 0.755,
+          "z": 14.55,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "StandardSeat054",
+          "x": 1.265,
+          "z": 14.55,
+          "yaw": 3.141592653589793,
+          "row": 10
+        },
+        {
+          "name": "StandardSeat055",
+          "x": -0.245,
+          "z": 15.48,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "StandardSeat056",
+          "x": -0.755,
+          "z": 15.48,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "StandardSeat057",
+          "x": -1.265,
+          "z": 15.48,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "StandardSeat058",
+          "x": 0.755,
+          "z": 15.48,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "StandardSeat059",
+          "x": 1.265,
+          "z": 15.48,
+          "yaw": 3.141592653589793,
+          "row": 11
+        },
+        {
+          "name": "StandardSeat060",
+          "x": -0.245,
+          "z": 16.41,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "StandardSeat061",
+          "x": -0.755,
+          "z": 16.41,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "StandardSeat062",
+          "x": -1.265,
+          "z": 16.41,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "StandardSeat063",
+          "x": 0.755,
+          "z": 16.41,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "StandardSeat064",
+          "x": 1.265,
+          "z": 16.41,
+          "yaw": 3.141592653589793,
+          "row": 12
+        },
+        {
+          "name": "StandardSeat065",
+          "x": -0.245,
+          "z": 17.34,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "StandardSeat066",
+          "x": -0.755,
+          "z": 17.34,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "StandardSeat067",
+          "x": -1.265,
+          "z": 17.34,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "StandardSeat068",
+          "x": 0.755,
+          "z": 17.34,
+          "yaw": 3.141592653589793,
+          "row": 13
+        },
+        {
+          "name": "StandardSeat069",
+          "x": 1.265,
+          "z": 17.34,
+          "yaw": 3.141592653589793,
+          "row": 13
+        }
+      ],
+      "sha256": "b46cb04ab16e7412cec45377df95b1a4952e6cbc75451880efae8cabdd021d17"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@vsm/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5180",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 5180",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vsm/shared": "*",
+    "@xyflow/react": "12.12.0",
+    "lucide-react": "1.48.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router-dom": "7.18.4",
+    "three": "0.181.2"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.181.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "vite": "8.3.1"
+  }
+}

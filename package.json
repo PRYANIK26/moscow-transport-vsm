@@ -1,0 +1,39 @@
+{
+  "name": "vsm-practice",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:api": "node scripts/run.mjs npm run dev -w @vsm/api",
+    "dev:web": "node scripts/run.mjs npm run dev -w @vsm/web --",
+    "db:up": "bash scripts/local-db.sh start",
+    "db:down": "bash scripts/local-db.sh stop",
+    "db:setup": "node scripts/run.mjs npm run db:setup -w @vsm/api",
+    "build": "npm run docs:build && npm run build -w @vsm/shared && npm run build -w @vsm/api && npm run build -w @vsm/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test -w @vsm/api",
+    "test:e2e": "playwright test",
+    "start:api": "node scripts/run.mjs npm run start -w @vsm/api",
+    "start:worker": "node scripts/run.mjs npm run worker -w @vsm/api",
+    "preview:web": "node scripts/run.mjs npm run preview -w @vsm/web --",
+    "test:editor": "node --import tsx scripts/test-editor.mjs",
+    "docs:build": "node --import tsx scripts/docs/build.mjs",
+    "docs:check": "node --import tsx scripts/docs/check.mjs",
+    "docs:test-api": "node --import tsx --test apps/api/test/docs.test.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "^22.0.0",
+    "prettier": "^3.9.9",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "type": "module"
+}
